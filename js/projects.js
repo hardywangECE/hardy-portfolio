@@ -15,10 +15,6 @@ function buildViewerControls(viewerInstance, hud) {
     btn.addEventListener("click", () => {
       const action = btn.dataset.action;
       if (action === "reset") viewerInstance.resetView();
-      if (action === "wireframe") {
-        const on = viewerInstance.toggleWireframe();
-        btn.classList.toggle("active", on);
-      }
       if (action === "rotate") {
         const on = viewerInstance.toggleAutoRotate();
         btn.classList.toggle("active", on);
@@ -90,7 +86,6 @@ function renderProjects() {
            <span class="viewer-status" data-state="idle">SCROLL TO LOAD 3D MODEL</span>
            <div class="viewer-toolbar">
              <button data-action="reset" title="Reset view">RESET</button>
-             <button data-action="wireframe" title="Toggle wireframe">WIRE</button>
              <button data-action="rotate" title="Toggle auto-rotate">ROTATE</button>
              <button data-action="fullscreen" title="Fullscreen">⛶</button>
            </div>

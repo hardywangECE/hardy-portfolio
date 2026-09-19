@@ -247,18 +247,6 @@ export class StepViewer {
     if (this._modelGroup) frameObject(this._modelGroup, this.camera, this.controls);
   }
 
-  toggleWireframe(force) {
-    if (!this._modelGroup) return false;
-    let next = force;
-    this._modelGroup.traverse((child) => {
-      if (child.isMesh) {
-        if (next === undefined) next = !child.material.wireframe;
-        child.material.wireframe = next;
-      }
-    });
-    return next;
-  }
-
   toggleAutoRotate(force) {
     this.autoRotate = force !== undefined ? force : !this.autoRotate;
     this.controls.autoRotate = this.autoRotate;
