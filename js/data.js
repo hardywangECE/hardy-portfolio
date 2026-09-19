@@ -104,7 +104,7 @@ export const projects = [
       { src: "assets/img/steering-wheel-assembly.webp", caption: "Hand-populating prototype boards." },
       { src: "assets/img/steering-wheel-populated.webp", caption: "Assembled and hand-soldered steering wheel board." },
     ],
-    model: "assets/models/steering-wheel.step",
+    model: "assets/models/steering-wheel.glb",
   },
   {
     id: "enav",
@@ -131,7 +131,7 @@ export const projects = [
     ],
     future:
       "Next revision: replace the ESP32 DevKitC carrier with a bare STM32 MCU. Dropping the dev-board module cuts real per-unit BOM cost, and STM32's ADC blocks aren't time-shared with a radio the way the ESP32's are — sidestepping the ADC/WiFi conflict this revision needed a firmware workaround for. Its deep-sleep current is also a better starting point if the fleet moves to battery power.",
-    model: "assets/models/enav.step",
+    model: "assets/models/enav.glb",
   },
   {
     id: "pcb1",
@@ -147,6 +147,6 @@ export const projects = [
       "Validated the board with continuity checks before power-up, functional testing under load on a bench supply, and measured diode forward-voltage drop against datasheet spec to confirm component selection.",
     ],
     tags: ["Altium Designer", "Power Electronics", "Connector Design", "Bench Validation"],
-    model: "assets/models/pcb1.step",
+    model: "assets/models/pcb1.glb",
   },
 ];

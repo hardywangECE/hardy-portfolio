@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "../vendor/three/OrbitControls.js";
+import { mergeGeometries } from "../vendor/three/BufferGeometryUtils.js";
+import { GLTFLoader } from "../vendor/three/GLTFLoader.js";
 
 // occt-import-js is loaded as a classic global script (vendor/occt/occt-import-js.js)
 // so its WASM asset resolves relative to that file regardless of page URL depth.
@@ -15,7 +17,9 @@ function getOcctEngine() {
 
 const stepFileCache = new Map(); // url -> parsed occt result promise
 
-function loadStepGeometry(url) {
+// Exported so tools/bake-step.html can reuse the exact same parse settings
+// and mesh-building logic when pre-baking a STEP file to .glb offline.
+export function loadStepGeometry(url) {
   if (!stepFileCache.has(url)) {
     const promise = (async () => {
       const [occt, buffer] = await Promise.all([
@@ -28,8 +32,14 @@ function loadStepGeometry(url) {
       const result = occt.ReadStepFile(new Uint8Array(buffer), {
         linearUnit: "millimeter",
         linearDeflectionType: "bounding_box_ratio",
-        linearDeflection: 0.0015,
-        angularDeflection: 0.3,
+        // Coarser than occt-import-js's default: these boards have a lot of
+        // small repeated hardware (headers, screws, buttons) where fine
+        // tessellation adds a lot of triangles without adding much you can
+        // see at portfolio viewing distance. This roughly halves triangle
+        // count on the denser boards, which matters a lot once every solid
+        // is merged into one draw call (see buildModelGroup).
+        linearDeflection: 0.003,
+        angularDeflection: 0.45,
       });
       if (!result.success) throw new Error(`occt-import-js failed to parse ${url}`);
       return result;
@@ -46,11 +56,10 @@ const DEFAULT_COLOR = new THREE.Color(0x2ad6c9);
 // every mesh without a top-level color flattens a lot of real component
 // color into one flat teal, which reads as blotchy/discolored next to solids
 // that do have a color. Build a per-vertex color buffer from brep_faces when
-// it's available so each face keeps its real color instead.
+// it's available (falling back to the mesh's own base color everywhere else)
+// so every geometry ends up with the same attribute set and can be merged
+// into a single draw call below.
 function buildMeshColorAttribute(mesh, baseColor) {
-  if (!mesh.brep_faces || !mesh.brep_faces.length) return null;
-
-  const indexArr = mesh.index.array;
   const vertexCount = mesh.attributes.position.array.length / 3;
   const colors = new Float32Array(vertexCount * 3);
   for (let i = 0; i < vertexCount; i++) {
@@ -59,26 +68,33 @@ function buildMeshColorAttribute(mesh, baseColor) {
     colors[i * 3 + 2] = baseColor.b;
   }
 
-  let anyFaceColor = false;
-  for (const face of mesh.brep_faces) {
-    if (!face.color) continue;
-    anyFaceColor = true;
-    const faceColor = new THREE.Color(face.color[0], face.color[1], face.color[2]);
-    for (let t = face.first; t <= face.last; t++) {
-      for (let k = 0; k < 3; k++) {
-        const vi = indexArr[t * 3 + k];
-        colors[vi * 3] = faceColor.r;
-        colors[vi * 3 + 1] = faceColor.g;
-        colors[vi * 3 + 2] = faceColor.b;
+  if (mesh.brep_faces && mesh.brep_faces.length) {
+    const indexArr = mesh.index.array;
+    for (const face of mesh.brep_faces) {
+      if (!face.color) continue;
+      const faceColor = new THREE.Color(face.color[0], face.color[1], face.color[2]);
+      for (let t = face.first; t <= face.last; t++) {
+        for (let k = 0; k < 3; k++) {
+          const vi = indexArr[t * 3 + k];
+          colors[vi * 3] = faceColor.r;
+          colors[vi * 3 + 1] = faceColor.g;
+          colors[vi * 3 + 2] = faceColor.b;
+        }
       }
     }
   }
 
-  return anyFaceColor ? colors : null;
+  return colors;
 }
 
-function buildModelGroup(result) {
-  const group = new THREE.Group();
+// A board can have 1000+ separate solids. Rendering each as its own
+// THREE.Mesh means 1000+ draw calls every frame, which is the main reason
+// these viewers felt slow — not just to load, but to orbit once loaded.
+// Since every geometry below carries the same attributes (position, normal,
+// color), they can all be concatenated into one BufferGeometry and drawn
+// with a single shared material, cutting draw calls from ~N solids to 1.
+export function buildModelGroup(result) {
+  const geometries = [];
   for (const mesh of result.meshes) {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute(
@@ -96,26 +112,45 @@ function buildModelGroup(result) {
     const baseColor = mesh.color
       ? new THREE.Color(mesh.color[0], mesh.color[1], mesh.color[2])
       : DEFAULT_COLOR;
+    geometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(buildMeshColorAttribute(mesh, baseColor), 3)
+    );
 
-    const vertexColors = buildMeshColorAttribute(mesh, baseColor);
-    if (vertexColors) {
-      geometry.setAttribute("color", new THREE.Float32BufferAttribute(vertexColors, 3));
-    }
-
-    const material = new THREE.MeshStandardMaterial({
-      color: vertexColors ? 0xffffff : baseColor,
-      vertexColors: !!vertexColors,
-      metalness: 0.12,
-      roughness: 0.75,
-      flatShading: false,
-    });
-
-    const threeMesh = new THREE.Mesh(geometry, material);
-    threeMesh.castShadow = false;
-    threeMesh.receiveShadow = false;
-    group.add(threeMesh);
+    geometries.push(geometry);
   }
+
+  const merged = mergeGeometries(geometries, false);
+  for (const geometry of geometries) geometry.dispose();
+
+  const material = new THREE.MeshStandardMaterial({
+    vertexColors: true,
+    metalness: 0.12,
+    roughness: 0.75,
+    flatShading: false,
+  });
+
+  const group = new THREE.Group();
+  group.add(new THREE.Mesh(merged, material));
   return group;
+}
+
+const gltfLoader = new GLTFLoader();
+
+// Pre-baked .glb models (see tools/bake-step.html) skip OpenCascade's STEP
+// interpretation entirely — that parse is the actual bottleneck for these
+// files (7-13s in testing, independent of tessellation settings), not
+// anything on the JS/render side. A .glb is already-tessellated binary
+// geometry, so this loads in well under a second.
+function loadGlbGroup(url) {
+  return new Promise((resolve, reject) => {
+    gltfLoader.load(
+      url,
+      (gltf) => resolve(gltf.scene),
+      undefined,
+      (err) => reject(err)
+    );
+  });
 }
 
 function frameObject(object, camera, controls, offset = 1.6) {
@@ -227,15 +262,23 @@ export class StepViewer {
   async load() {
     this.onStatus("loading", "Loading model…");
     try {
-      const result = await loadStepGeometry(this.modelUrl);
+      const isGlb = this.modelUrl.toLowerCase().endsWith(".glb");
+      let statusMessage;
+
+      if (isGlb) {
+        this._modelGroup = await loadGlbGroup(this.modelUrl);
+        statusMessage = "Model loaded";
+      } else {
+        const result = await loadStepGeometry(this.modelUrl);
+        this._modelGroup = buildModelGroup(result);
+        statusMessage = `${result.meshes.length} parts loaded`;
+      }
       if (this._disposed) return;
 
-      this._modelGroup = buildModelGroup(result);
       this.scene.add(this._modelGroup);
-
       frameObject(this._modelGroup, this.camera, this.controls);
 
-      this.onStatus("ready", `${result.meshes.length} parts loaded`);
+      this.onStatus("ready", statusMessage);
       this._startLoop();
     } catch (err) {
       console.error(err);

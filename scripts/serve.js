@@ -18,10 +18,44 @@ const MIME = {
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".webp": "image/webp",
+  ".glb": "model/gltf-binary",
 };
+
+// Local-only helper for tools/bake-step.html: lets that page save a baked
+// .glb straight into assets/models/ instead of going through a manual
+// download-then-move step. Never runs in production — GitHub Pages only
+// serves static files and never executes this script.
+function handleSave(req, res) {
+  const name = new URL(req.url, "http://localhost").searchParams.get("name") || "";
+  if (!/^[a-zA-Z0-9_-]+\.glb$/.test(name)) {
+    res.writeHead(400, { "Content-Type": "text/plain" });
+    res.end("Invalid filename");
+    return;
+  }
+  const chunks = [];
+  req.on("data", (c) => chunks.push(c));
+  req.on("end", () => {
+    const dest = path.join(root, "assets", "models", name);
+    fs.writeFile(dest, Buffer.concat(chunks), (err) => {
+      if (err) {
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(String(err));
+        return;
+      }
+      console.log(`Saved ${dest}`);
+      res.writeHead(200, { "Content-Type": "text/plain" });
+      res.end("OK");
+    });
+  });
+}
 
 http
   .createServer((req, res) => {
+    if (req.method === "POST" && req.url.startsWith("/__save")) {
+      handleSave(req, res);
+      return;
+    }
+
     let reqPath = decodeURIComponent(req.url.split("?")[0]);
     if (reqPath === "/") reqPath = "/index.html";
     const filePath = path.join(root, reqPath);
