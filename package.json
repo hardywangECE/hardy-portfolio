@@ -1,0 +1,14 @@
+{
+  "name": "hardy-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hardy Wang — personal portfolio site with interactive in-browser CAD viewers.",
+  "scripts": {
+    "start": "node scripts/serve.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "occt-import-js": "0.0.23",
+    "three": "^0.186.0"
+  }
+}

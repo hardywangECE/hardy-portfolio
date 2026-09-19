@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardy Wang — Electrical Engineer</title>
+  <meta name="description" content="Hardy Wang — Electrical Engineering student specializing in PCB design, embedded systems, and power electronics. Interactive 3D project viewer." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%23070a0e%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 font-family=%22monospace%22 fill=%22%2339ffde%22 text-anchor=%22middle%22>H</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-scanline" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-brand">HW<span class="blink">_</span></a>
+    <nav class="nav-links" id="nav-links">
+      <a href="#about">01_ABOUT</a>
+      <a href="#experience">02_EXPERIENCE</a>
+      <a href="#projects">03_PROJECTS</a>
+      <a href="#skills">04_SKILLS</a>
+      <a href="#contact">05_CONTACT</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main id="top">
+    <section id="hero" class="hero">
+      <div class="hero-inner">
+        <p class="prompt">root@hardywang:~$ <span id="typed-cmd" class="cmd"></span><span class="cursor">_</span></p>
+        <h1 class="hero-title">HARDY<span>_</span>WANG</h1>
+        <p class="hero-role" id="hero-role"></p>
+        <p class="hero-tagline" id="hero-tagline"></p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" id="resume-link" download>[ DOWNLOAD_RESUME ]</a>
+          <a class="btn" href="#projects">[ VIEW_PROJECTS ]</a>
+        </div>
+        <div class="hero-links" id="hero-links"></div>
+      </div>
+      <div class="scroll-cue"><span>SCROLL</span><i>▾</i></div>
+    </section>
+
+    <section id="about" class="section">
+      <h2 class="section-title">// 01 — ABOUT</h2>
+      <div class="about-grid">
+        <div class="about-bio" id="about-bio"></div>
+        <aside class="about-side">
+          <div class="panel" id="education-panel"></div>
+          <div class="panel status-panel">
+            <p class="panel-label">// SYSTEM STATUS</p>
+            <ul class="status-list">
+              <li><span class="dot dot-live"></span> AVAILABLE FOR CO-OP / NEW GRAD ROLES</li>
+              <li><span class="dot dot-live"></span> BASED IN VANCOUVER · TORONTO</li>
+              <li><span class="dot dot-idle"></span> RESPONSE TIME: &lt; 24H</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="experience" class="section">
+      <h2 class="section-title">// 02 — EXPERIENCE</h2>
+      <div class="timeline" id="experience-timeline"></div>
+    </section>
+
+    <section id="projects" class="section">
+      <h2 class="section-title">// 03 — PROJECTS</h2>
+      <p class="section-sub">Live CAD viewers, rendered client-side from the original STEP files. Drag to orbit, scroll to zoom, right-click drag to pan — same manipulation as Altium's 3D view.</p>
+      <div class="projects" id="projects-list"></div>
+    </section>
+
+    <section id="skills" class="section">
+      <h2 class="section-title">// 04 — SKILLS</h2>
+      <div class="skills-grid" id="skills-grid"></div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <h2 class="section-title">// 05 — CONTACT</h2>
+      <p class="section-sub">Open to hardware engineering co-ops, internships, and new-grad roles.</p>
+      <div class="contact-links" id="contact-links"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Hardy Wang · built with Three.js &amp; occt-import-js · rendered fully client-side</p>
+  </footer>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.js"
+    }
+  }
+  </script>
+  <script src="vendor/occt/occt-import-js.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
