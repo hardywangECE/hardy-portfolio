@@ -101,7 +101,7 @@ export const projects = [
     ],
     images: [
       { src: "assets/img/steering-wheel-layout.webp", caption: "2D layout in Altium — CAN bus, cruise control, horn, and push-to-talk zones labeled." },
-      { src: "assets/img/steering-wheel-assembly.webp", caption: "Hand-populating prototype boards, steering wheel board in the foreground." },
+      { src: "assets/img/steering-wheel-assembly.webp", caption: "Hand-populating prototype boards." },
       { src: "assets/img/steering-wheel-populated.webp", caption: "Assembled and hand-soldered steering wheel board." },
     ],
     model: "assets/models/steering-wheel.step",
@@ -127,7 +127,7 @@ export const projects = [
     ],
     images: [
       { src: "assets/img/enav-layout.png", caption: "2D layout in Altium — ESP32 carrier, RTC, and microSD sections labeled." },
-      { src: "assets/img/enav-bringup.webp", caption: "Bring-up on the bench — powered over USB with the SMA antenna connected and RTC/status LEDs lit." },
+      { src: "assets/img/enav-bringup.webp", caption: "Bringing up the eNav board." },
     ],
     future:
       "Next revision: replace the ESP32 DevKitC carrier with a bare STM32 MCU. Dropping the dev-board module cuts real per-unit BOM cost, and STM32's ADC blocks aren't time-shared with a radio the way the ESP32's are — sidestepping the ADC/WiFi conflict this revision needed a firmware workaround for. Its deep-sleep current is also a better starting point if the fleet moves to battery power.",
