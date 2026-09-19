@@ -85,14 +85,13 @@ function buildModelGroup(result) {
       "position",
       new THREE.Float32BufferAttribute(mesh.attributes.position.array, 3)
     );
-    if (mesh.attributes.normal) {
-      geometry.setAttribute(
-        "normal",
-        new THREE.Float32BufferAttribute(mesh.attributes.normal.array, 3)
-      );
-    }
     geometry.setIndex(mesh.index.array);
-    if (!mesh.attributes.normal) geometry.computeVertexNormals();
+    // Always compute smooth vertex normals ourselves: some STEP tessellations
+    // ship per-triangle (flat) normals, which show up as visible faceting on
+    // curved surfaces once any specular material is applied — easy to mistake
+    // for color blotching. Recomputing normals from the shared index buffer
+    // smooths shading across a curved solid instead.
+    geometry.computeVertexNormals();
 
     const baseColor = mesh.color
       ? new THREE.Color(mesh.color[0], mesh.color[1], mesh.color[2])
@@ -106,8 +105,8 @@ function buildModelGroup(result) {
     const material = new THREE.MeshStandardMaterial({
       color: vertexColors ? 0xffffff : baseColor,
       vertexColors: !!vertexColors,
-      metalness: 0.35,
-      roughness: 0.55,
+      metalness: 0.12,
+      roughness: 0.75,
       flatShading: false,
     });
 
@@ -179,13 +178,20 @@ export class StepViewer {
     this.controls.rotateSpeed = 0.75;
     this.controls.screenSpacePanning = true;
 
-    const hemi = new THREE.HemisphereLight(0x8fd8ff, 0x090c10, 0.9);
+    // Neutral-white lighting throughout: a saturated colored rim light here
+    // previously washed a cyan tint across whichever side of a model faced
+    // it, which read as color blotching on flat PCB surfaces rather than a
+    // deliberate highlight.
+    const hemi = new THREE.HemisphereLight(0xf3f8f7, 0x14181a, 0.75);
     this.scene.add(hemi);
-    const key = new THREE.DirectionalLight(0xffffff, 1.35);
+    const key = new THREE.DirectionalLight(0xffffff, 1.2);
     key.position.set(6, 10, 8);
     this.scene.add(key);
-    const rim = new THREE.DirectionalLight(0x2ad6c9, 0.6);
-    rim.position.set(-8, -4, -6);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.45);
+    fill.position.set(-8, 4, -6);
+    this.scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xdfeeff, 0.3);
+    rim.position.set(-6, -3, -8);
     this.scene.add(rim);
 
     this._animate = this._animate.bind(this);
