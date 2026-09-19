@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hardy Wang — Electrical Engineer</title>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var theme = saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        if (theme === "light") document.documentElement.setAttribute("data-theme", "light");
+      } catch (e) {}
+    })();
+  </script>
   <meta name="description" content="Hardy Wang — Electrical Engineering student specializing in PCB design, embedded systems, and power electronics. Interactive 3D project viewer." />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%23070a0e%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 font-family=%22monospace%22 fill=%22%2339ffde%22 text-anchor=%22middle%22>H</text></svg>" />
@@ -27,9 +36,14 @@
       <a href="#skills">04_SKILLS</a>
       <a href="#contact">05_CONTACT</a>
     </nav>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-controls">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" title="Toggle color theme">
+        <span id="theme-toggle-label">[ DARK ]</span>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
 
   <main id="top">

@@ -233,6 +233,26 @@ function renderContact() {
 // ---------------------------------------------------------------------------
 // Nav + scroll behaviour
 // ---------------------------------------------------------------------------
+function initThemeToggle() {
+  const btn = $("#theme-toggle");
+  const label = $("#theme-toggle-label");
+
+  const getTheme = () => document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  const applyLabel = () => {
+    label.textContent = getTheme() === "light" ? "[ LIGHT ]" : "[ DARK ]";
+  };
+
+  applyLabel();
+
+  btn.addEventListener("click", () => {
+    const next = getTheme() === "light" ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    applyLabel();
+  });
+}
+
 function initNav() {
   const nav = $("#nav");
   const toggle = $("#nav-toggle");
@@ -295,6 +315,7 @@ renderExperience();
 renderProjects();
 renderSkills();
 renderContact();
+initThemeToggle();
 initNav();
 initReveal();
 $("#year").textContent = new Date().getFullYear();
