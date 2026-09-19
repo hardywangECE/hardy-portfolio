@@ -327,6 +327,13 @@ ul { margin: 0; padding: 0; list-style: none; }
   padding: 90px 28px;
 }
 
+/* First section on a standalone page (no tall hero above it) needs more
+   clearance so content doesn't start tucked under the fixed nav. */
+.page-section {
+  padding-top: 150px;
+  min-height: 100svh;
+}
+
 .section-title {
   font-size: 1.6rem;
   color: var(--accent);
@@ -406,6 +413,40 @@ ul { margin: 0; padding: 0; list-style: none; }
 .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .dot-live { background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 2s ease-in-out infinite; }
 .dot-idle { background: var(--text-faint); }
+
+/* ---------------------------------------------------------------------- */
+/* Home quick-nav cards                                                    */
+/* ---------------------------------------------------------------------- */
+.quicknav-section { padding-top: 0; }
+
+.quicknav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.quicknav-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.quicknav-card:hover {
+  border-color: var(--accent-dim);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px var(--glow-softer);
+}
+.quicknav-card h3 { font-size: 1.15rem; margin: 2px 0 2px; }
+.quicknav-card p:not(.panel-label) { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0; }
+.quicknav-cta {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--accent-dim);
+}
+.quicknav-card:hover .quicknav-cta { color: var(--accent); }
 
 /* ---------------------------------------------------------------------- */
 /* Experience timeline                                                     */
