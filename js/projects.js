@@ -45,6 +45,34 @@ function renderProjects() {
          </div>`
       : "";
 
+    const layoutNotesHtml = project.layoutNotes
+      ? `<div class="layout-notes">
+           <p class="layout-notes-label">// 2D LAYOUT NOTES</p>
+           <ul class="layout-notes-list">${project.layoutNotes.map((n) => `<li>${n}</li>`).join("")}</ul>
+         </div>`
+      : "";
+
+    const galleryHtml = project.images && project.images.length
+      ? `<div class="project-gallery">
+           <p class="gallery-label">// PHOTOS</p>
+           <div class="gallery-grid">
+             ${project.images
+               .map(
+                 (img) =>
+                   `<figure class="gallery-item">
+                      <img src="${img.src}" alt="${img.caption}" loading="lazy" />
+                      <figcaption>${img.caption}</figcaption>
+                    </figure>`
+               )
+               .join("")}
+           </div>
+         </div>`
+      : "";
+
+    const extra = layoutNotesHtml || galleryHtml
+      ? `<div class="project-extra">${layoutNotesHtml}${galleryHtml}</div>`
+      : "";
+
     const card = el(
       "article",
       "project-card reveal",
@@ -71,7 +99,8 @@ function renderProjects() {
          <div class="viewer-corner tr"></div>
          <div class="viewer-corner bl"></div>
          <div class="viewer-corner br"></div>
-       </div>`
+       </div>
+       ${extra}`
     );
 
     wrap.appendChild(card);

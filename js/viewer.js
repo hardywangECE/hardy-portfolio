@@ -41,6 +41,42 @@ function loadStepGeometry(url) {
 
 const DEFAULT_COLOR = new THREE.Color(0x2ad6c9);
 
+// Some solids in a STEP export carry a color per b-rep face rather than one
+// color for the whole mesh (mesh.color). Falling back to DEFAULT_COLOR for
+// every mesh without a top-level color flattens a lot of real component
+// color into one flat teal, which reads as blotchy/discolored next to solids
+// that do have a color. Build a per-vertex color buffer from brep_faces when
+// it's available so each face keeps its real color instead.
+function buildMeshColorAttribute(mesh, baseColor) {
+  if (!mesh.brep_faces || !mesh.brep_faces.length) return null;
+
+  const indexArr = mesh.index.array;
+  const vertexCount = mesh.attributes.position.array.length / 3;
+  const colors = new Float32Array(vertexCount * 3);
+  for (let i = 0; i < vertexCount; i++) {
+    colors[i * 3] = baseColor.r;
+    colors[i * 3 + 1] = baseColor.g;
+    colors[i * 3 + 2] = baseColor.b;
+  }
+
+  let anyFaceColor = false;
+  for (const face of mesh.brep_faces) {
+    if (!face.color) continue;
+    anyFaceColor = true;
+    const faceColor = new THREE.Color(face.color[0], face.color[1], face.color[2]);
+    for (let t = face.first; t <= face.last; t++) {
+      for (let k = 0; k < 3; k++) {
+        const vi = indexArr[t * 3 + k];
+        colors[vi * 3] = faceColor.r;
+        colors[vi * 3 + 1] = faceColor.g;
+        colors[vi * 3 + 2] = faceColor.b;
+      }
+    }
+  }
+
+  return anyFaceColor ? colors : null;
+}
+
 function buildModelGroup(result) {
   const group = new THREE.Group();
   for (const mesh of result.meshes) {
@@ -54,18 +90,22 @@ function buildModelGroup(result) {
         "normal",
         new THREE.Float32BufferAttribute(mesh.attributes.normal.array, 3)
       );
-    } else {
-      geometry.computeVertexNormals();
     }
     geometry.setIndex(mesh.index.array);
     if (!mesh.attributes.normal) geometry.computeVertexNormals();
 
-    const color = mesh.color
+    const baseColor = mesh.color
       ? new THREE.Color(mesh.color[0], mesh.color[1], mesh.color[2])
       : DEFAULT_COLOR;
 
+    const vertexColors = buildMeshColorAttribute(mesh, baseColor);
+    if (vertexColors) {
+      geometry.setAttribute("color", new THREE.Float32BufferAttribute(vertexColors, 3));
+    }
+
     const material = new THREE.MeshStandardMaterial({
-      color,
+      color: vertexColors ? 0xffffff : baseColor,
+      vertexColors: !!vertexColors,
       metalness: 0.35,
       roughness: 0.55,
       flatShading: false,
@@ -103,15 +143,6 @@ function frameObject(object, camera, controls, offset = 1.6) {
   return { size, fitDist };
 }
 
-// Grid sized relative to the model so it reads as a "build plate" under any board.
-function makeGrid(fitDist) {
-  const gridSize = Math.max(fitDist * 1.6, 10);
-  const grid = new THREE.GridHelper(gridSize, 24, 0x1c6b6a, 0x123033);
-  grid.material.transparent = true;
-  grid.material.opacity = 0.55;
-  return grid;
-}
-
 export class StepViewer {
   constructor(container, { modelUrl, onStatus } = {}) {
     this.container = container;
@@ -131,7 +162,7 @@ export class StepViewer {
   _initScene() {
     const { clientWidth: w, clientHeight: h } = this.container;
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, logarithmicDepthBuffer: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(w, h);
     this.renderer.setClearColor(0x000000, 0);
@@ -196,11 +227,7 @@ export class StepViewer {
       this._modelGroup = buildModelGroup(result);
       this.scene.add(this._modelGroup);
 
-      const { fitDist } = frameObject(this._modelGroup, this.camera, this.controls);
-      const grid = makeGrid(fitDist);
-      grid.position.y = new THREE.Box3().setFromObject(this._modelGroup).min.y;
-      this.scene.add(grid);
-      this._grid = grid;
+      frameObject(this._modelGroup, this.camera, this.controls);
 
       this.onStatus("ready", `${result.meshes.length} SOLIDS LOADED`);
       this._startLoop();

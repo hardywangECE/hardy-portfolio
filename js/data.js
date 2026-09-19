@@ -92,6 +92,16 @@ export const projects = [
       "Mitigated noise and EMI through opto-isolation and dedicated return paths, protecting sensitive MCU logic from high-transient signals.",
     ],
     tags: ["Altium Designer", "STM32", "CAN Bus", "EMI Mitigation"],
+    layoutNotes: [
+      "Carved a power-pour cutout beneath the CAN High/Low differential pair to keep the matched routing clear of the surrounding ground/power fill.",
+      "Added a power-pour cutout on the noisy side of the opto-isolated Push-to-Talk circuitry, keeping its high-transient signal from coupling into the plane.",
+      "Grouped the four momentary switch inputs (Horn, Push-to-Talk, Cruise Control, Next Page) symmetrically around the CAN connector, keeping each debounce return path short.",
+    ],
+    images: [
+      { src: "assets/img/steering-wheel-layout.webp", caption: "2D layout in Altium — CAN bus, cruise control, horn, and push-to-talk zones labeled." },
+      { src: "assets/img/steering-wheel-assembly.webp", caption: "Hand-populating prototype boards, steering wheel board in the foreground." },
+      { src: "assets/img/steering-wheel-populated.webp", caption: "Assembled and hand-soldered steering wheel board." },
+    ],
     model: "assets/models/steering-wheel.step",
   },
   {
@@ -108,6 +118,14 @@ export const projects = [
       "Diagnosed and resolved an ADC/WiFi radio resource conflict at the SoC level, routing analog sensing to ADC and firmware-gating RF transmission to eliminate noise coupling into sensitive analog signal paths.",
     ],
     tags: ["Altium Designer", "ESP32", "RF Impedance Matching", "PCB Layout"],
+    layoutNotes: [
+      "Cut a notch in the board outline next to the ESP32's onboard WiFi module so no copper or plane sits underneath it, keeping the antenna's near-field clear during data uploads.",
+      "Isolated the Si4732 RF receiver from every high-noise net on the board — the I2C bus, the WiFi module, and other digital switching — rather than relying on shielding alone.",
+      "Added power-pour cutouts wherever the layout allowed, prioritizing a clean RF front end over maximum plane coverage.",
+    ],
+    images: [
+      { src: "assets/img/enav-layout.png", caption: "2D layout in Altium — ESP32 carrier, RTC, and microSD sections labeled." },
+    ],
     future:
       "Next revision: replace the ESP32 DevKitC carrier with a bare STM32 MCU. Dropping the dev-board module cuts real per-unit BOM cost, and STM32's ADC blocks aren't time-shared with a radio the way the ESP32's are — sidestepping the ADC/WiFi conflict this revision needed a firmware workaround for. Its deep-sleep current is also a better starting point if the fleet moves to battery power.",
     model: "assets/models/enav.step",
