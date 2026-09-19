@@ -150,6 +150,12 @@ function renderProjects() {
   for (const project of projects) {
     const bullets = project.bullets.map((b) => `<li>${b}</li>`).join("");
     const tags = (project.tags || []).map((t) => `<span class="tag">${t}</span>`).join("");
+    const future = project.future
+      ? `<div class="project-future">
+           <p class="project-future-label">// PLANNED ITERATION</p>
+           <p>${project.future}</p>
+         </div>`
+      : "";
 
     const card = el(
       "article",
@@ -160,6 +166,7 @@ function renderProjects() {
          <p class="project-summary">${project.summary}</p>
          <ul class="project-bullets">${bullets}</ul>
          <div class="tags">${tags}</div>
+         ${future}
        </div>
        <div class="project-viewer">
          <div class="viewer-canvas"></div>

@@ -98,12 +98,18 @@ export const projects = [
     id: "enav",
     name: "eNav",
     tool: "Altium Designer",
-    dates: "",
-    summary: "Add a one-line summary for eNav here.",
+    dates: "May 2026 – Present",
+    summary:
+      "Custom RF receiver PCB for a 20-unit ambient-RF data collection fleet — Si4732 FM tuner, ESP32 carrier, RTC, and SD logging, engineered for unattended field deployment.",
     bullets: [
-      "Add project details here — what does this board do, what was your role, and what were the key design challenges?",
+      "Designed a fleet-deployable embedded sensor node around an ESP32 carrier, Si4732 FM receiver, RTC, and SD storage, targeting a $50 BOM across a multi-unit production run.",
+      "Completed schematic-to-layout PCB design and routing for a two-layer board, released for fab and SMT assembly.",
+      "Selected the SMA antenna front-end and designed its matching network, tuning component values on the bench for even gain across the whole FM band rather than a narrowband peak.",
+      "Diagnosed and resolved an ADC/WiFi radio resource conflict at the SoC level, routing analog sensing to ADC and firmware-gating RF transmission to eliminate noise coupling into sensitive analog signal paths.",
     ],
-    tags: ["Altium Designer"],
+    tags: ["Altium Designer", "ESP32", "RF Impedance Matching", "PCB Layout"],
+    future:
+      "Next revision: replace the ESP32 DevKitC carrier with a bare STM32 MCU. Dropping the dev-board module cuts real per-unit BOM cost, and STM32's ADC blocks aren't time-shared with a radio the way the ESP32's are — sidestepping the ADC/WiFi conflict this revision needed a firmware workaround for. Its deep-sleep current is also a better starting point if the fleet moves to battery power.",
     model: "assets/models/enav.step",
   },
   {

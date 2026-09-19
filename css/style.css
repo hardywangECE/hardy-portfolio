@@ -506,6 +506,24 @@ ul { margin: 0; padding: 0; list-style: none; }
   letter-spacing: 0.04em;
 }
 
+.project-future {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px dashed var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+}
+.project-future-label {
+  color: var(--accent-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.project-future p:last-child {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
 .project-viewer {
   position: relative;
   min-height: 340px;
