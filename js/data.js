@@ -45,7 +45,7 @@ export const experience = [
     location: "Toronto, ON",
     dates: "May 2026 – Present",
     bullets: [
-      "Designed a fleet-deployable embedded sensor node (ESP32, Si4732 RF receiver, RTC, SD storage), targeting a $50 BOM across a multi-unit production run.",
+      "Designed a fleet-deployable embedded sensor node (ESP32, RF receiver, RTC, SD storage).",
       "Designed the RF front end, selecting the antenna and its impedance-matching network, and isolated the receiver from high-noise nets on the board — the I2C bus, the WiFi module, and other digital switching — rather than relying on shielding alone.",
       "Diagnosed and resolved an ADC/WiFi radio resource conflict at the SoC level, routing analog sensing to ADC and firmware-gating RF transmission to eliminate noise coupling into sensitive analog signal paths.",
       "Completed schematic-to-layout PCB design and routing for a two-layer board, released for fab and SMT assembly.",
