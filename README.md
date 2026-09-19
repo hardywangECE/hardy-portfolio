@@ -4,19 +4,18 @@ A dependency-free static portfolio site with interactive, in-browser CAD viewers
 
 ## How it works
 
-- **No bundler.** Plain HTML/CSS/JS with native ES modules and an [import map](index.html) so the browser resolves `three` directly to a vendored copy — nothing to compile.
-- **3D viewer** ([js/viewer.js](js/viewer.js)) uses [occt-import-js](https://github.com/kovacsv/occt-import-js) (OpenCascade compiled to WebAssembly) to parse `.step` files straight into a `three.js` scene, with `OrbitControls` for rotate/pan/zoom — the same manipulation as Altium's 3D view. Each project's viewer lazy-loads only when scrolled into view.
+- **No bundler.** Plain HTML/CSS/JS with native ES modules and an [import map](projects.html) so the browser resolves `three` directly to a vendored copy — nothing to compile.
+- **Multi-page.** `index.html` (hero, quick links, skills, contact), `about.html`, `experience.html`, and `projects.html` are separate pages sharing one stylesheet. [js/common.js](js/common.js) holds the behaviour every page needs (theme toggle, nav, reveal-on-scroll); each page has a thin entry script ([js/home.js](js/home.js), [js/about.js](js/about.js), [js/experience.js](js/experience.js), [js/projects.js](js/projects.js)) that renders its own content from `data.js` and calls `initPage()`.
+- **3D viewer** ([js/viewer.js](js/viewer.js)), used only on `projects.html`, uses [occt-import-js](https://github.com/kovacsv/occt-import-js) (OpenCascade compiled to WebAssembly) to parse `.step` files straight into a `three.js` scene, with `OrbitControls` for rotate/pan/zoom — the same manipulation as Altium's 3D view. Each project's viewer lazy-loads only when scrolled into view.
 - **Content** lives in [js/data.js](js/data.js) — edit that file to update your bio, experience, skills, or project copy without touching HTML/CSS.
 
 ## Editing content
 
-Open [js/data.js](js/data.js). Everything on the page (except headings/labels baked into `index.html`) is generated from that file:
+Open [js/data.js](js/data.js). Everything on every page (except headings/labels baked into each `.html` file) is generated from that file:
 
 - `profile` — name, tagline, email, LinkedIn, resume path.
 - `education`, `skills`, `experience` — straightforward arrays/objects.
-- `projects` — each entry can include a `model` path to a `.step` file for an interactive viewer. Leave `model` out to render a text-only project card.
-
-`eNav` and `PCB1` currently have placeholder bullet points (the source resume only had a full write-up for the Steering Wheel PCB) — fill those in with real project details.
+- `projects` — each entry can include a `model` path to a `.step` file for an interactive viewer, and an optional `future` string rendered as a dashed "planned iteration" callout. Leave `model` out to render a text-only project card.
 
 ## Adding a new project with a 3D model
 
