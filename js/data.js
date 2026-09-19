@@ -114,14 +114,18 @@ export const projects = [
   },
   {
     id: "pcb1",
-    name: "PCB1",
+    name: "Driver Fan Controller Board",
     tool: "Altium Designer",
     dates: "",
-    summary: "Add a one-line summary for PCB1 here.",
+    summary:
+      "Fixed-speed driver fan controller board, simplified from an earlier PWM-based design and hardened with back-EMF protection and mis-connection-proof connectors.",
     bullets: [
-      "Add project details here — what does this board do, what was your role, and what were the key design challenges?",
+      "Simplified the board from a PWM-based speed-control design to a fixed-speed switched circuit, removing the 555 timer, potentiometer, and associated PWM components to cut size and complexity.",
+      "Added a Schottky rectifier diode across the fan terminals for back-EMF protection, sized with margin above the fan's actual operating current and voltage.",
+      "Specified color-differentiated, right-angle power and fan connectors to prevent mis-connection and reduce wire strain versus a prior vertical-connector revision.",
+      "Validated the board with continuity checks before power-up, functional testing under load on a bench supply, and measured diode forward-voltage drop against datasheet spec to confirm component selection.",
     ],
-    tags: ["Altium Designer"],
+    tags: ["Altium Designer", "Power Electronics", "Connector Design", "Bench Validation"],
     model: "assets/models/pcb1.step",
   },
 ];
