@@ -15,30 +15,27 @@
   </script>
   <meta name="description" content="Hardy Wang — Electrical Engineering student specializing in PCB design, embedded systems, and power electronics. Interactive 3D project viewer." />
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%23070a0e%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 font-family=%22monospace%22 fill=%22%2339ffde%22 text-anchor=%22middle%22>H</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2228%22 fill=%22%23d97757%22/><text x=%2250%22 y=%2268%22 font-size=%2256%22 font-family=%22sans-serif%22 font-weight=%22700%22 fill=%22%23fff%22 text-anchor=%22middle%22>H</text></svg>" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-scanline" aria-hidden="true"></div>
-
   <header class="nav" id="nav">
-    <a href="index.html" class="nav-brand">HW<span class="blink">_</span></a>
+    <a href="index.html" class="nav-brand">Hardy Wang</a>
     <nav class="nav-links" id="nav-links">
-      <a href="about.html">01_ABOUT</a>
-      <a href="experience.html">02_EXPERIENCE</a>
-      <a href="projects.html">03_PROJECTS</a>
-      <a href="index.html#skills">04_SKILLS</a>
-      <a href="index.html#contact">05_CONTACT</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#contact">Contact</a>
     </nav>
     <div class="nav-controls">
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" title="Toggle color theme">
-        <span id="theme-toggle-label">[ DARK ]</span>
+        <span id="theme-toggle-label">Dark</span>
       </button>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -49,49 +46,48 @@
   <main id="top">
     <section id="hero" class="hero">
       <div class="hero-inner">
-        <p class="prompt">root@hardywang:~$ <span id="typed-cmd" class="cmd"></span><span class="cursor">_</span></p>
-        <h1 class="hero-title">HARDY<span>_</span>WANG</h1>
+        <h1 class="hero-title">Hi, I'm Hardy Wang</h1>
         <p class="hero-role" id="hero-role"></p>
         <p class="hero-tagline" id="hero-tagline"></p>
         <div class="hero-actions">
-          <a class="btn btn-primary" id="resume-link" download>[ DOWNLOAD_RESUME ]</a>
-          <a class="btn" href="projects.html">[ VIEW_PROJECTS ]</a>
+          <a class="btn btn-primary" id="resume-link" download>Download résumé</a>
+          <a class="btn" href="projects.html">View projects</a>
         </div>
         <div class="hero-links" id="hero-links"></div>
       </div>
-      <div class="scroll-cue"><span>SCROLL</span><i>▾</i></div>
+      <div class="scroll-cue"><span>Scroll</span><i>▾</i></div>
     </section>
 
     <section class="section quicknav-section">
       <div class="quicknav-grid">
         <a class="quicknav-card panel reveal" href="about.html">
-          <p class="panel-label">// 01</p>
+          <p class="panel-label">01</p>
           <h3>About</h3>
           <p>Who I am, what I'm building, and where I study.</p>
-          <span class="quicknav-cta">[ ENTER ]</span>
+          <span class="quicknav-cta">Explore →</span>
         </a>
         <a class="quicknav-card panel reveal" href="experience.html">
-          <p class="panel-label">// 02</p>
+          <p class="panel-label">02</p>
           <h3>Experience</h3>
           <p>Internships and team roles across hardware and firmware.</p>
-          <span class="quicknav-cta">[ ENTER ]</span>
+          <span class="quicknav-cta">Explore →</span>
         </a>
         <a class="quicknav-card panel reveal" href="projects.html">
-          <p class="panel-label">// 03</p>
+          <p class="panel-label">03</p>
           <h3>Projects</h3>
           <p>Interactive 3D viewers for every PCB I've designed.</p>
-          <span class="quicknav-cta">[ ENTER ]</span>
+          <span class="quicknav-cta">Explore →</span>
         </a>
       </div>
     </section>
 
     <section id="skills" class="section">
-      <h2 class="section-title">// 04 — SKILLS</h2>
+      <h2 class="section-title">Skills</h2>
       <div class="skills-grid" id="skills-grid"></div>
     </section>
 
     <section id="contact" class="section contact-section">
-      <h2 class="section-title">// 05 — CONTACT</h2>
+      <h2 class="section-title">Contact</h2>
       <p class="section-sub">Open to hardware engineering co-ops, internships, and new-grad roles.</p>
       <div class="contact-links" id="contact-links"></div>
     </section>

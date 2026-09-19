@@ -36,21 +36,21 @@ function renderProjects() {
     const tags = (project.tags || []).map((t) => `<span class="tag">${t}</span>`).join("");
     const future = project.future
       ? `<div class="project-future">
-           <p class="project-future-label">// PLANNED ITERATION</p>
+           <p class="project-future-label">What's next</p>
            <p>${project.future}</p>
          </div>`
       : "";
 
     const layoutNotesHtml = project.layoutNotes
       ? `<div class="layout-notes">
-           <p class="layout-notes-label">// 2D LAYOUT NOTES</p>
+           <p class="layout-notes-label">2D Layout Notes</p>
            <ul class="layout-notes-list">${project.layoutNotes.map((n) => `<li>${n}</li>`).join("")}</ul>
          </div>`
       : "";
 
     const galleryHtml = project.images && project.images.length
       ? `<div class="project-gallery">
-           <p class="gallery-label">// PHOTOS</p>
+           <p class="gallery-label">Photos</p>
            <div class="gallery-grid">
              ${project.images
                .map(
@@ -83,17 +83,13 @@ function renderProjects() {
        <div class="project-viewer">
          <div class="viewer-canvas"></div>
          <div class="viewer-hud">
-           <span class="viewer-status" data-state="idle">SCROLL TO LOAD 3D MODEL</span>
+           <span class="viewer-status" data-state="idle">Scroll to load the 3D model</span>
            <div class="viewer-toolbar">
-             <button data-action="reset" title="Reset view">RESET</button>
-             <button data-action="rotate" title="Toggle auto-rotate">ROTATE</button>
-             <button data-action="fullscreen" title="Fullscreen">⛶</button>
+             <button data-action="reset" title="Reset view">Reset</button>
+             <button data-action="rotate" title="Toggle auto-rotate">Rotate</button>
+             <button data-action="fullscreen" title="Fullscreen">⤢</button>
            </div>
          </div>
-         <div class="viewer-corner tl"></div>
-         <div class="viewer-corner tr"></div>
-         <div class="viewer-corner bl"></div>
-         <div class="viewer-corner br"></div>
        </div>
        ${extra}`
     );

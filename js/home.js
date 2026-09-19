@@ -1,17 +1,7 @@
 import { profile, skills } from "./data.js";
 import { $, el, initPage } from "./common.js";
 
-function typeCommand(target, text, speed = 42) {
-  let i = 0;
-  (function tick() {
-    target.textContent = text.slice(0, i);
-    i++;
-    if (i <= text.length) setTimeout(tick, speed);
-  })();
-}
-
 function renderHero() {
-  typeCommand($("#typed-cmd"), "./launch_portfolio.sh --profile=hardy_wang");
   $("#hero-role").textContent = profile.role;
   $("#hero-tagline").textContent = profile.tagline;
 
@@ -19,14 +9,14 @@ function renderHero() {
   resumeLink.href = profile.resumeFile;
 
   const links = [
-    { label: "EMAIL", href: `mailto:${profile.email}` },
-    { label: "LINKEDIN", href: profile.linkedin },
+    { label: "Email", href: `mailto:${profile.email}` },
+    { label: "LinkedIn", href: profile.linkedin },
   ];
-  if (profile.github) links.push({ label: "GITHUB", href: profile.github });
+  if (profile.github) links.push({ label: "GitHub", href: profile.github });
 
   const wrap = $("#hero-links");
   links.forEach(({ label, href }) => {
-    const a = el("a", "hero-link", `<span>[</span>${label}<span>]</span>`);
+    const a = el("a", "hero-link", label);
     a.href = href;
     if (href.startsWith("http")) {
       a.target = "_blank";
@@ -44,7 +34,7 @@ function renderSkills() {
       el(
         "div",
         "skill-card reveal",
-        `<p class="skill-cat">// ${category.toUpperCase()}</p>
+        `<p class="skill-cat">${category}</p>
          <div class="chip-row">${chips}</div>`
       )
     );
@@ -54,9 +44,9 @@ function renderSkills() {
 function renderContact() {
   const wrap = $("#contact-links");
   const items = [
-    { label: "EMAIL", value: profile.email, href: `mailto:${profile.email}` },
-    { label: "LINKEDIN", value: "hardy-wang", href: profile.linkedin },
-    { label: "RESUME", value: "download PDF", href: profile.resumeFile, download: true },
+    { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+    { label: "LinkedIn", value: "hardy-wang", href: profile.linkedin },
+    { label: "Résumé", value: "Download PDF", href: profile.resumeFile, download: true },
   ];
   items.forEach(({ label, value, href, download }) => {
     const a = el(

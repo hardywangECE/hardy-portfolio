@@ -225,7 +225,7 @@ export class StepViewer {
   }
 
   async load() {
-    this.onStatus("loading", "COMPILING GEOMETRY…");
+    this.onStatus("loading", "Loading model…");
     try {
       const result = await loadStepGeometry(this.modelUrl);
       if (this._disposed) return;
@@ -235,11 +235,11 @@ export class StepViewer {
 
       frameObject(this._modelGroup, this.camera, this.controls);
 
-      this.onStatus("ready", `${result.meshes.length} SOLIDS LOADED`);
+      this.onStatus("ready", `${result.meshes.length} parts loaded`);
       this._startLoop();
     } catch (err) {
       console.error(err);
-      this.onStatus("error", "FAILED TO PARSE MODEL");
+      this.onStatus("error", "Couldn't load this model");
     }
   }
 

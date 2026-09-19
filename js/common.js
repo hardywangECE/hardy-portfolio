@@ -15,7 +15,7 @@ function initThemeToggle() {
 
   const getTheme = () => (document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
   const applyLabel = () => {
-    label.textContent = getTheme() === "light" ? "[ LIGHT ]" : "[ DARK ]";
+    label.textContent = getTheme() === "light" ? "Light" : "Dark";
   };
 
   applyLabel();

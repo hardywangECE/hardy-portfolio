@@ -6,7 +6,7 @@ function renderAbout() {
   profile.bio.forEach((para) => bio.appendChild(el("p", null, para)));
 
   const eduPanel = $("#education-panel");
-  eduPanel.appendChild(el("p", "panel-label", "// EDUCATION"));
+  eduPanel.appendChild(el("p", "panel-label", "Education"));
   education.forEach((e) => {
     eduPanel.appendChild(
       el(
