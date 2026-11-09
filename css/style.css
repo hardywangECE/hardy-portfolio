@@ -329,6 +329,18 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 32px;
   margin-top: 30px;
 }
+.about-main { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+
+.headshot {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 35%;
+  border: 4px solid var(--bg-panel);
+  box-shadow: 0 0 0 2px var(--accent), var(--card-shadow);
+}
+
 .about-bio p { color: var(--text); font-size: 1.02rem; }
 
 .about-side { display: flex; flex-direction: column; gap: 20px; }

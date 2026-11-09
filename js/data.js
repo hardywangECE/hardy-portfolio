@@ -26,7 +26,7 @@ export const education = [
     school: "University of British Columbia",
     location: "Vancouver, BC",
     degree: "Bachelor of Applied Science in Electrical Engineering",
-    dates: "Sept 2024 – Present",
+    dates: "Sept 2024 – Dec 2028 (expected)",
   },
 ];
 
@@ -45,11 +45,10 @@ export const experience = [
     location: "Toronto, ON",
     dates: "May 2026 – Present",
     bullets: [
-      "Designed a fleet-deployable embedded sensor node (ESP32, RF receiver, RTC, SD storage).",
-      "Designed the RF front end, selecting the antenna and its impedance-matching network, and isolated the receiver from high-noise nets on the board — the I2C bus, the WiFi module, and other digital switching — rather than relying on shielding alone.",
-      "Diagnosed and resolved an ADC/WiFi radio resource conflict at the SoC level, routing analog sensing to ADC and firmware-gating RF transmission to eliminate noise coupling into sensitive analog signal paths.",
-      "Completed schematic-to-layout PCB design and routing for a two-layer board, released for fab and SMT assembly.",
-      "Contributed firmware support for board bring-up and diagnostics alongside the hardware design.",
+      "Took a two-layer RF sensor board from schematic through layout, fab, and bring-up, and wrote the ESP32 firmware that runs on it, including the I2C and SPI drivers.",
+      "Tuned the receiver's per-channel settle time from measured data and added a warm-up dwell to remove a first-sweep reading error, so every sweep is usable.",
+      "Built the data log to survive power loss and sped up uploads with batching so the backlog no longer grows.",
+      "Traced an ADC fault to an ADC and WiFi SoC resource conflict, fixed it in firmware, and avoided a board respin. Used VNA S-parameter measurements to develop the RF front end.",
     ],
   },
   {
@@ -58,11 +57,8 @@ export const experience = [
     location: "Vancouver, BC",
     dates: "Sept 2025 – Present",
     bullets: [
-      "Designing and testing PCB assemblies for the vehicle's electrical and control systems, currently focused on the steering wheel board responsible for the majority of driver input including CAN-enabled functions.",
-      "Utilizing Altium Designer and hardware debugging tools to iterate board layouts, validate circuit performance, and ensure compliance with system-level power and safety requirements.",
-      "Ran integration meetings with relevant teams to ensure requirements were satisfied and board development deadlines were met.",
-      "Assembled and hand-soldered PCB prototypes and final boards used in the vehicle, ensuring reliable electrical connections and readiness for integration.",
-      "Created and managed the PCB Bill of Materials (BOM), optimizing component selection for cost.",
+      "One of ~8 engineers on the Power and Signals team. Designed the steering wheel board (7 driver inputs over CAN, UART, and I2C) from schematic to a race-ready unit, syncing weekly with mechanical and software subteams on connectors, mounting, and firmware interfaces.",
+      "Selected components against the team budget, tracked issues and action items on my board and teammates' boards, and hand assembled and bench validated prototype and final boards.",
     ],
   },
   {
@@ -71,8 +67,7 @@ export const experience = [
     location: "Toronto, ON",
     dates: "May 2026 – Present",
     bullets: [
-      "Collected, cleaned, and validated engineering design data to support training of a machine learning model for automated Bill of Materials (BOM) generation.",
-      "Created and reviewed electrical BOMs, verifying component selections and ensuring consistency with engineering design standards and project specifications.",
+      "Reviewed electrical Bills of Materials against engineering design standards, catching component mismatches before they reached procurement.",
     ],
   },
 ];
